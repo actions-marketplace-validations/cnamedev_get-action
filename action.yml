@@ -13,10 +13,13 @@ inputs:
 outputs:
   ip:
     description: "The IP address from the record"
+    value: ${{ steps.result.outputs.ip }}
   port:
     description: "The port number from the record"
+    value: ${{ steps.result.outputs.port }}
   ip_port:
     description: "The combined IP:PORT string from the record"
+    value: ${{ steps.result.outputs.ip_port }}
 
 runs:
   using: "composite"
@@ -36,7 +39,7 @@ runs:
         echo "ip=$IP" >> $GITHUB_OUTPUT
         echo "port=$PORT" >> $GITHUB_OUTPUT
         echo "ip_port=$IP_PORT" >> $GITHUB_OUTPUT
-      id: cnamedev
+      id: result
 
 branding:
   icon: "globe"
