@@ -32,7 +32,7 @@ The combined IP:PORT string from the record.
 
 ```yaml
 steps:
-  - uses: cnamedev/get-action@v1.0.0
+  - uses: cnamedev/get-action@v1.0.1
     id: cnamedev
     with:
       domain: "your-domain.example.com"
