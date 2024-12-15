@@ -1,0 +1,43 @@
+name: "cname.dev get action"
+description: "Get IP and port information from cname.dev"
+author: "cname.dev"
+
+inputs:
+  domain:
+    description: "The domain to look up"
+    required: true
+  token:
+    description: "Your cname.dev API token"
+    required: true
+
+outputs:
+  ip:
+    description: "The IP address from the record"
+  port:
+    description: "The port number from the record"
+  ip_port:
+    description: "The combined IP:PORT string from the record"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install cnamed
+      shell: bash
+      run: curl -sL https://cli.cname.dev | bash
+
+    - name: Get Record
+      shell: bash
+      run: |
+        OUTPUT=$(cnamed get --domain ${{ inputs.domain }} --token ${{ inputs.token }})
+        IP_PORT=$(echo "$OUTPUT" | grep -oP ' is: \K.*')
+        IP=$(echo $IP_PORT | cut -d':' -f1)
+        PORT=$(echo $IP_PORT | cut -d':' -f2)
+
+        echo "ip=$IP" >> $GITHUB_OUTPUT
+        echo "port=$PORT" >> $GITHUB_OUTPUT
+        echo "ip_port=$IP_PORT" >> $GITHUB_OUTPUT
+      id: cnamedev
+
+branding:
+  icon: "globe"
+  color: "blue"
